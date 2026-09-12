@@ -1,0 +1,6 @@
+{
+  "name": "Puncak Escape",
+  "description": "Premium villa rental in Puncak, Cisarua, and Tugu Selatan, West Java. Discover luxury private villas and book instantly via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
