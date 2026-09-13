@@ -39,6 +39,11 @@ export const VILLAS_DATA: Villa[] = [
     reviewCount: 48,
     isFeatured: true,
     popularFor: 'family',
+    status: 'published',
+    verificationStage: 'verified',
+    publishedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    googlePlaceId: 'ChIJ_casablanca_tugu_puncak',
+    googleMapsUrl: 'https://maps.google.com/?q=Villa+Casablanca+Tugu+Selatan+Puncak',
     images: [
       'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80',
       'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80',

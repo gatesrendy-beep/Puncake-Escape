@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSearch } from './components/HeroSearch';
 import { IntentSelector } from './components/IntentSelector';
@@ -11,10 +11,21 @@ import { TrustSection } from './components/TrustSection';
 import { PuncakGuide } from './components/PuncakGuide';
 import { Footer } from './components/Footer';
 import { MobileStickyBar } from './components/MobileStickyBar';
+import { NewVillasSection } from './components/NewVillasSection';
+
+// Admin Portal Components
+import { AdminDashboard } from './components/admin/AdminDashboard';
+import { AdminLoginModal } from './components/admin/AdminLoginModal';
+import { GoogleMapsImportStep } from './components/admin/GoogleMapsImportStep';
+import { VillaEditorModal } from './components/admin/VillaEditorModal';
+import { PublishSuccessModal } from './components/admin/PublishSuccessModal';
+
 import { VILLAS_DATA, WHATSAPP_DISPLAY } from './data/villas';
-import { Villa, FilterOptions } from './types';
+import { Villa, FilterOptions, GooglePlaceImportResult } from './types';
 import { PhoneCall, Sparkles, MapPin } from 'lucide-react';
 import { generateGeneralWhatsAppInquiryUrl } from './utils/format';
+import { fetchAllCustomVillas, saveVillaApi } from './services/api';
+import { getStoredAdminAuth, setStoredAdminAuth } from './services/storage';
 
 function getInitialNextWeekendDates(): { checkIn: string; checkOut: string } {
   const today = new Date();
@@ -40,6 +51,26 @@ export default function App() {
   const [checkInDate, setCheckInDate] = useState<string>(initialDates.checkIn);
   const [checkOutDate, setCheckOutDate] = useState<string>(initialDates.checkOut);
   const [guestsCount, setGuestsCount] = useState<number>(12);
+
+  // All catalog villas (combining built-in seed villas with user-created / published ones)
+  const [allVillas, setAllVillas] = useState<Villa[]>(() => {
+    return VILLAS_DATA.map((v) => ({
+      ...v,
+      status: v.status || 'published',
+      verificationStage: v.verificationStage || 'verified',
+    }));
+  });
+
+  // Admin routing & auth states
+  const [isAdminView, setIsAdminView] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(getStoredAdminAuth);
+  const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
+
+  // Admin sub-modals
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false);
+  const [editingVilla, setEditingVilla] = useState<Partial<Villa> | null>(null);
+  const [importedPlaceData, setImportedPlaceData] = useState<GooglePlaceImportResult | undefined>(undefined);
+  const [recentlyPublishedVilla, setRecentlyPublishedVilla] = useState<Villa | null>(null);
 
   // Filters
   const [filters, setFilters] = useState<FilterOptions>({
@@ -72,7 +103,78 @@ export default function App() {
   const [selectedVillaForWhatsApp, setSelectedVillaForWhatsApp] = useState<Villa | null>(null);
   const [isSavedDrawerOpen, setIsSavedDrawerOpen] = useState(false);
 
-  // Save to localStorage
+  // Fetch custom and server villas on mount and merge
+  useEffect(() => {
+    fetchAllCustomVillas().then((customVillas) => {
+      if (!customVillas || customVillas.length === 0) return;
+
+      setAllVillas((prev) => {
+        const merged = [...prev];
+        customVillas.forEach((cv) => {
+          const index = merged.findIndex((v) => v.id === cv.id || (cv.googlePlaceId && v.googlePlaceId === cv.googlePlaceId));
+          if (index >= 0) {
+            merged[index] = { ...merged[index], ...cv };
+          } else {
+            merged.unshift(cv);
+          }
+        });
+        return merged;
+      });
+    });
+  }, []);
+
+  // Check URL routes for /admin or #admin, and /villa/:slug
+  useEffect(() => {
+    const handleLocationChange = () => {
+      const pathname = window.location.pathname;
+      const hash = window.location.hash;
+
+      if (pathname === '/admin' || hash === '#admin') {
+        setIsAdminView(true);
+        if (!getStoredAdminAuth()) {
+          setShowAdminLoginModal(true);
+        }
+      }
+
+      // Check /villa/[slug] or #villa/[slug]
+      const villaSlugMatch = pathname.match(/\/villa\/([^/]+)/) || hash.match(/#villa\/([^/]+)/);
+      if (villaSlugMatch && villaSlugMatch[1]) {
+        const slug = villaSlugMatch[1];
+        const matched = allVillas.find((v) => v.slug === slug || v.id === slug);
+        if (matched) {
+          setSelectedVillaForDetail(matched);
+        }
+      }
+    };
+
+    handleLocationChange();
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('hashchange', handleLocationChange);
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('hashchange', handleLocationChange);
+    };
+  }, [allVillas]);
+
+  // Update SEO Title and Meta Description dynamically
+  useEffect(() => {
+    if (selectedVillaForDetail) {
+      document.title = selectedVillaForDetail.seoTitle || `${selectedVillaForDetail.name} | Puncake Escape Puncak`;
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute(
+          'content',
+          selectedVillaForDetail.seoDescription || selectedVillaForDetail.tagline || 'Sewa villa privat di Puncak.'
+        );
+      }
+    } else if (isAdminView) {
+      document.title = 'Admin Portal | Puncake Escape';
+    } else {
+      document.title = 'Puncake Escape | Sewa Villa Privat Puncak & Cisarua Terverifikasi';
+    }
+  }, [selectedVillaForDetail, isAdminView]);
+
+  // Save favorites to localStorage
   useEffect(() => {
     try {
       localStorage.setItem('puncak_escape_saved_villas', JSON.stringify(savedIds));
@@ -113,9 +215,14 @@ export default function App() {
     setCheckOutDate(outDate);
   };
 
-  // Filtered & Sorted Villas
+  // Only show PUBLISHED villas to public travelers
+  const publicVillas = useMemo(() => {
+    return allVillas.filter((v) => (v.status ? v.status === 'published' : true));
+  }, [allVillas]);
+
+  // Filtered & Sorted Villas for Catalog
   const filteredVillas = useMemo(() => {
-    let result = VILLAS_DATA.filter((villa) => {
+    let result = publicVillas.filter((villa) => {
       // Intent Category match
       if (filters.intent && filters.intent !== 'all') {
         if (!villa.intentCategory || !villa.intentCategory.includes(filters.intent as any)) {
@@ -152,7 +259,7 @@ export default function App() {
         const matchesName = villa.name.toLowerCase().includes(query);
         const matchesArea = villa.location.area.toLowerCase().includes(query);
         const matchesTagline = villa.tagline.toLowerCase().includes(query);
-        const matchesFeatures = villa.features.some(f => f.toLowerCase().includes(query));
+        const matchesFeatures = villa.features.some((f) => f.toLowerCase().includes(query));
         const matchesDesc = villa.description.toLowerCase().includes(query);
         if (!matchesName && !matchesArea && !matchesTagline && !matchesFeatures && !matchesDesc) {
           return false;
@@ -186,11 +293,11 @@ export default function App() {
     }
 
     return result;
-  }, [filters]);
+  }, [publicVillas, filters]);
 
   const savedVillasList = useMemo(() => {
-    return VILLAS_DATA.filter((villa) => savedIds.includes(villa.id));
-  }, [savedIds]);
+    return allVillas.filter((villa) => savedIds.includes(villa.id));
+  }, [allVillas, savedIds]);
 
   const scrollToVillas = () => {
     const el = document.getElementById('catalog-section');
@@ -207,6 +314,182 @@ export default function App() {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Admin Actions
+  const handleOpenAdminPortal = () => {
+    setIsAdminView(true);
+    window.history.pushState(null, '', '#admin');
+    if (!getStoredAdminAuth()) {
+      setShowAdminLoginModal(true);
+    }
+  };
+
+  const handleExitAdminPortal = () => {
+    setIsAdminView(false);
+    window.history.pushState(null, '', window.location.pathname === '/admin' ? '/' : window.location.pathname);
+  };
+
+  const handleAdminLogout = () => {
+    setStoredAdminAuth(false);
+    setIsAdminAuthenticated(false);
+    setIsAdminView(false);
+    window.history.pushState(null, '', '/');
+  };
+
+  // Save Draft Handler
+  const handleSaveDraft = useCallback(async (villa: Villa) => {
+    await saveVillaApi(villa);
+    setAllVillas((prev) => {
+      const idx = prev.findIndex((v) => v.id === villa.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = villa;
+        return copy;
+      }
+      return [villa, ...prev];
+    });
+    setEditingVilla(null);
+    setIsImportModalOpen(false);
+  }, []);
+
+  // Publish Handler
+  const handlePublish = useCallback(async (villa: Villa) => {
+    await saveVillaApi(villa);
+    setAllVillas((prev) => {
+      const idx = prev.findIndex((v) => v.id === villa.id);
+      if (idx >= 0) {
+        const copy = [...prev];
+        copy[idx] = villa;
+        return copy;
+      }
+      return [villa, ...prev];
+    });
+    setEditingVilla(null);
+    setIsImportModalOpen(false);
+    setRecentlyPublishedVilla(villa);
+  }, []);
+
+  // Unpublish Handler
+  const handleUnpublish = useCallback(async (villa: Villa) => {
+    const updated: Villa = { ...villa, status: 'draft', updatedAt: new Date().toISOString() };
+    await saveVillaApi(updated);
+    setAllVillas((prev) => prev.map((v) => (v.id === villa.id ? updated : v)));
+  }, []);
+
+  // Archive Handler
+  const handleArchive = useCallback(async (villa: Villa) => {
+    const updated: Villa = { ...villa, status: 'archived', updatedAt: new Date().toISOString() };
+    await saveVillaApi(updated);
+    setAllVillas((prev) => prev.map((v) => (v.id === villa.id ? updated : v)));
+  }, []);
+
+  // ============================================
+  // RENDER ADMIN VIEW
+  // ============================================
+  if (isAdminView && isAdminAuthenticated) {
+    return (
+      <>
+        <AdminDashboard
+          villas={allVillas}
+          onAddNewVilla={() => {
+            setImportedPlaceData(undefined);
+            setIsImportModalOpen(true);
+          }}
+          onEditVilla={(villa) => {
+            setEditingVilla(villa);
+          }}
+          onPreviewVilla={(villa) => {
+            setSelectedVillaForDetail(villa);
+          }}
+          onPublishVilla={handlePublish}
+          onUnpublishVilla={handleUnpublish}
+          onArchiveVilla={handleArchive}
+          onExitAdmin={handleExitAdminPortal}
+          onLogout={handleAdminLogout}
+        />
+
+        {/* Step 1: Google Maps URL Import Modal */}
+        {isImportModalOpen && (
+          <GoogleMapsImportStep
+            existingVillas={allVillas}
+            onImportSuccess={(placeData) => {
+              setIsImportModalOpen(false);
+              setImportedPlaceData(placeData);
+              setEditingVilla({
+                name: placeData.name,
+                location: {
+                  area: placeData.area as any,
+                  district: placeData.district,
+                  city: placeData.city,
+                  postalCode: placeData.postalCode,
+                  address: placeData.formattedAddress,
+                  distanceFromJakarta: '90-120 menit via Tol Jagorawi',
+                },
+                rating: placeData.rating,
+                reviewCount: placeData.userRatingCount,
+                googlePlaceId: placeData.placeId,
+                sourcePlaceId: placeData.placeId,
+                googleMapsUrl: placeData.googleMapsUri,
+                coordinates: { lat: placeData.latitude, lng: placeData.longitude },
+              });
+            }}
+            onOpenExisting={(existing) => {
+              setIsImportModalOpen(false);
+              setEditingVilla(existing);
+            }}
+            onCancel={() => setIsImportModalOpen(false)}
+          />
+        )}
+
+        {/* Step 2: Villa Review & Editor Modal */}
+        {editingVilla && (
+          <VillaEditorModal
+            initialVilla={editingVilla}
+            placeData={importedPlaceData}
+            onSaveDraft={handleSaveDraft}
+            onPublish={handlePublish}
+            onClose={() => {
+              setEditingVilla(null);
+              setImportedPlaceData(undefined);
+            }}
+          />
+        )}
+
+        {/* Step 3: Publish Success Celebration Modal */}
+        {recentlyPublishedVilla && (
+          <PublishSuccessModal
+            villa={recentlyPublishedVilla}
+            onViewVilla={(v) => {
+              setRecentlyPublishedVilla(null);
+              setIsAdminView(false);
+              setSelectedVillaForDetail(v);
+            }}
+            onBackToDashboard={() => {
+              setRecentlyPublishedVilla(null);
+            }}
+          />
+        )}
+
+        {/* Detail preview inside admin */}
+        {selectedVillaForDetail && (
+          <VillaDetailModal
+            villa={selectedVillaForDetail}
+            onClose={() => setSelectedVillaForDetail(null)}
+            isSaved={savedIds.includes(selectedVillaForDetail.id)}
+            onToggleSave={toggleSaveVilla}
+            checkInDate={checkInDate}
+            checkOutDate={checkOutDate}
+            guestsCount={guestsCount}
+            onDateChange={handleDateChange}
+            onGuestsChange={setGuestsCount}
+          />
+        )}
+      </>
+    );
+  }
+
+  // ============================================
+  // RENDER PUBLIC TRAVELER EXPERIENCE
+  // ============================================
   return (
     <div className="min-h-screen flex flex-col bg-stone-50 text-stone-900 font-sans">
       
@@ -245,13 +528,25 @@ export default function App() {
           />
         </div>
 
+        {/* ✨ NEW VILLAS Section (Pristine, 14-day auto-badge, sorted by publishedAt DESC) */}
+        <NewVillasSection
+          allVillas={publicVillas}
+          savedVillaIds={savedIds}
+          onToggleSave={toggleSaveVilla}
+          onSelectVilla={(v) => setSelectedVillaForDetail(v)}
+          onQuickBookWhatsApp={(v) => setSelectedVillaForWhatsApp(v)}
+          checkInDate={checkInDate}
+          checkOutDate={checkOutDate}
+          onViewAllCatalog={scrollToVillas}
+        />
+
         {/* Filter Bar (Sticky) */}
         <div id="catalog-section">
           <FilterBar
             filters={filters}
             onFilterChange={handleFilterChange}
             onResetFilters={handleResetFilters}
-            totalVillasCount={VILLAS_DATA.length}
+            totalVillasCount={publicVillas.length}
             filteredCount={filteredVillas.length}
           />
         </div>
@@ -310,6 +605,7 @@ export default function App() {
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                 <button
+                  type="button"
                   onClick={handleResetFilters}
                   className="px-5 py-2.5 rounded-xl bg-stone-900 hover:bg-stone-800 text-white font-semibold text-xs transition-colors"
                 >
@@ -338,11 +634,12 @@ export default function App() {
 
       </main>
 
-      {/* Footer */}
+      {/* Footer with subtle host/admin access */}
       <Footer
         onSelectArea={(area) => handleFilterChange({ area })}
         onFilterHeated={() => handleFilterChange({ onlyHeatedPool: true })}
         onFilterFamily={() => handleFilterChange({ minGuests: 20 })}
+        onOpenAdmin={handleOpenAdminPortal}
       />
 
       {/* Mobile Sticky Bar for instantaneous conversion */}
@@ -376,7 +673,12 @@ export default function App() {
       {selectedVillaForDetail && (
         <VillaDetailModal
           villa={selectedVillaForDetail}
-          onClose={() => setSelectedVillaForDetail(null)}
+          onClose={() => {
+            setSelectedVillaForDetail(null);
+            if (window.location.hash.startsWith('#villa/')) {
+              window.history.pushState(null, '', window.location.pathname);
+            }
+          }}
           isSaved={savedIds.includes(selectedVillaForDetail.id)}
           onToggleSave={toggleSaveVilla}
           checkInDate={checkInDate}
@@ -408,6 +710,23 @@ export default function App() {
         onRemoveSaved={toggleSaveVilla}
         onSelectVilla={(v) => setSelectedVillaForDetail(v)}
         onClearAll={() => setSavedIds([])}
+      />
+
+      {/* Admin Login Modal (When visiting /admin or clicking admin while not authenticated) */}
+      <AdminLoginModal
+        isOpen={showAdminLoginModal}
+        onSuccess={() => {
+          setIsAdminAuthenticated(true);
+          setShowAdminLoginModal(false);
+          setIsAdminView(true);
+        }}
+        onClose={() => {
+          setShowAdminLoginModal(false);
+          if (!isAdminAuthenticated) {
+            setIsAdminView(false);
+            window.history.pushState(null, '', '/');
+          }
+        }}
       />
 
     </div>

@@ -71,9 +71,28 @@ export function VillaCard({
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-center justify-between z-10">
           <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Automatic NEW badge within 14 days */}
+            {(() => {
+              if (!villa.publishedAt) return null;
+              const fourteenDaysMs = 14 * 24 * 60 * 60 * 1000;
+              const isWithin14Days = Date.now() - new Date(villa.publishedAt).getTime() <= fourteenDaysMs;
+              if (isWithin14Days) {
+                return (
+                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-800 text-white text-[10px] font-bold tracking-wider uppercase shadow-xs border border-emerald-500/30">
+                    NEW
+                  </span>
+                );
+              }
+              return null;
+            })()}
+
             <span className="px-2.5 py-1 rounded-full bg-stone-900/80 backdrop-blur-md text-stone-100 text-[11px] font-semibold flex items-center gap-1 border border-stone-700/50">
               <CheckCircle className="w-3 h-3 text-emerald-400" />
-              100% Terverifikasi
+              {villa.verificationStage === 'verified' 
+                ? 'Property Verified' 
+                : villa.verificationStage === 'google_located' 
+                ? 'Google Located' 
+                : '100% Terverifikasi'}
             </span>
             {villa.amenities.hasHeatedPool && (
               <span className="px-2 py-1 rounded-full bg-amber-500/90 backdrop-blur-md text-white text-[11px] font-semibold flex items-center gap-1 shadow-xs">

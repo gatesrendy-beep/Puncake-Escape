@@ -1,3 +1,6 @@
+export type VillaStatus = 'draft' | 'pending_review' | 'published' | 'archived';
+export type VerificationStage = 'google_located' | 'reviewed' | 'verified';
+
 export interface Villa {
   id: string;
   name: string;
@@ -6,10 +9,11 @@ export interface Villa {
   whyThisVilla: string; // Concise positioning statement for 2-second decision making
   intentCategory: ('family' | 'heated-pool' | 'mountain-view' | 'gathering' | 'romantic')[];
   location: {
-    area: 'Tugu Selatan' | 'Cisarua' | 'Puncak Pass' | 'Megamendung';
+    area: 'Tugu Selatan' | 'Cisarua' | 'Puncak Pass' | 'Megamendung' | string;
     district: string;
     city: string;
     postalCode: string;
+    address?: string;
     distanceFromJakarta?: string;
     googleMapsEmbedUrl?: string;
   };
@@ -41,6 +45,16 @@ export interface Villa {
     hasBonfire: boolean;
     hasVillaAttendant: boolean;
     parkingCapacityCars: number;
+    // Additional amenities from Puncake specific list
+    hasTeaGardenView?: boolean;
+    hasLivingRoom?: boolean;
+    hasAirConditioning?: boolean;
+    hasGazebo?: boolean;
+    hasFirePit?: boolean;
+    hasBreakfast?: boolean;
+    hasCaretaker24h?: boolean;
+    isFamilyFriendly?: boolean;
+    isPetFriendly?: boolean;
   };
   description: string;
   highlights: string[];
@@ -53,6 +67,55 @@ export interface Villa {
   checkOutTime: string;
   popularFor: 'family' | 'luxury' | 'gathering' | 'romantic';
   isFeatured?: boolean;
+
+  // Lifecycle & Admin Fields
+  status?: VillaStatus;
+  publishedAt?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  approvedBy?: string;
+  sourcePlaceId?: string;
+  googlePlaceId?: string;
+  googleMapsUrl?: string;
+  coordinates?: {
+    lat: number;
+    lng: number;
+  };
+  googleRating?: number;
+  googleReviewCount?: number;
+  googleAttribution?: {
+    name?: string;
+    uri?: string;
+  };
+  seoTitle?: string;
+  seoDescription?: string;
+  verificationStage?: VerificationStage;
+  whatsappNumber?: string;
+}
+
+export interface GooglePlaceImportResult {
+  placeId: string;
+  name: string;
+  formattedAddress: string;
+  area: string;
+  district: string;
+  city: string;
+  postalCode: string;
+  latitude: number;
+  longitude: number;
+  rating?: number;
+  userRatingCount?: number;
+  googleMapsUri: string;
+  phoneNumber?: string;
+  websiteUri?: string;
+  photos?: {
+    name: string;
+    url: string;
+    authorAttribution?: {
+      displayName: string;
+      uri: string;
+    };
+  }[];
 }
 
 export interface BookingState {
