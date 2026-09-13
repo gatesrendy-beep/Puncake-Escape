@@ -1,7 +1,7 @@
-import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY } from '../data/villas';
+import { WHATSAPP_NUMBER, WHATSAPP_DISPLAY, WHATSAPP_DISPLAY_INTL, SOCIAL_HANDLE, SOCIAL_LINKS } from '../data/villas';
 import { Villa } from '../types';
 
-export { WHATSAPP_NUMBER, WHATSAPP_DISPLAY };
+export { WHATSAPP_NUMBER, WHATSAPP_DISPLAY, WHATSAPP_DISPLAY_INTL, SOCIAL_HANDLE, SOCIAL_LINKS };
 
 export function formatRupiah(amount: number): string {
   return new Intl.NumberFormat('id-ID', {

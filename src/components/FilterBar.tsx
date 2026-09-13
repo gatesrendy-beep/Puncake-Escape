@@ -26,6 +26,7 @@ export function FilterBar({
   filteredCount,
 }: FilterBarProps) {
   const isAnyFilterActive = 
+    (filters.intent && filters.intent !== 'all') ||
     filters.area !== '' ||
     filters.onlyHeatedPool ||
     filters.onlyMountainView ||
@@ -95,6 +96,17 @@ export function FilterBar({
 
         {/* Filter Chips row (Horizontal scrollable) */}
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1 text-xs font-medium">
+          {filters.intent && filters.intent !== 'all' && (
+            <button
+              onClick={() => onFilterChange({ intent: 'all' })}
+              className="px-3 py-1.5 rounded-xl bg-emerald-900 text-white font-semibold flex items-center gap-1.5 shrink-0 shadow-xs"
+              title="Klik untuk hapus filter intent"
+            >
+              <span>Kategori: {filters.intent}</span>
+              <X className="w-3.5 h-3.5" />
+            </button>
+          )}
+
           <button
             onClick={() => onFilterChange({ area: '' })}
             className={`px-3 py-1.5 rounded-xl transition-colors shrink-0 ${

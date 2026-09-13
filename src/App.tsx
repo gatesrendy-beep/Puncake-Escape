@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Navbar } from './components/Navbar';
 import { HeroSearch } from './components/HeroSearch';
+import { IntentSelector } from './components/IntentSelector';
 import { FilterBar } from './components/FilterBar';
 import { VillaCard } from './components/VillaCard';
 import { VillaDetailModal } from './components/VillaDetailModal';
@@ -10,7 +11,7 @@ import { TrustSection } from './components/TrustSection';
 import { PuncakGuide } from './components/PuncakGuide';
 import { Footer } from './components/Footer';
 import { MobileStickyBar } from './components/MobileStickyBar';
-import { VILLAS_DATA } from './data/villas';
+import { VILLAS_DATA, WHATSAPP_DISPLAY } from './data/villas';
 import { Villa, FilterOptions } from './types';
 import { PhoneCall, Sparkles, MapPin } from 'lucide-react';
 import { generateGeneralWhatsAppInquiryUrl } from './utils/format';
@@ -42,6 +43,7 @@ export default function App() {
 
   // Filters
   const [filters, setFilters] = useState<FilterOptions>({
+    intent: 'all',
     area: '',
     minPrice: 0,
     maxPrice: 15000000,
@@ -91,6 +93,7 @@ export default function App() {
 
   const handleResetFilters = () => {
     setFilters({
+      intent: 'all',
       area: '',
       minPrice: 0,
       maxPrice: 15000000,
@@ -113,6 +116,12 @@ export default function App() {
   // Filtered & Sorted Villas
   const filteredVillas = useMemo(() => {
     let result = VILLAS_DATA.filter((villa) => {
+      // Intent Category match
+      if (filters.intent && filters.intent !== 'all') {
+        if (!villa.intentCategory || !villa.intentCategory.includes(filters.intent as any)) {
+          return false;
+        }
+      }
       // Area match
       if (filters.area && villa.location.area !== filters.area) {
         return false;
@@ -224,6 +233,17 @@ export default function App() {
           onGuestsChange={setGuestsCount}
           onSearchSubmit={scrollToVillas}
         />
+
+        {/* Discovery by Intent Selector */}
+        <div id="villa-list">
+          <IntentSelector
+            activeIntent={filters.intent || 'all'}
+            onSelectIntent={(intent) => {
+              handleFilterChange({ intent });
+              scrollToVillas();
+            }}
+          />
+        </div>
 
         {/* Filter Bar (Sticky) */}
         <div id="catalog-section">
@@ -346,8 +366,8 @@ export default function App() {
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-emerald-300 rounded-full animate-ping" />
           </div>
           <div className="text-left pr-1">
-            <span className="block text-[11px] text-emerald-200 font-medium leading-none">Ada Pertanyaan?</span>
-            <span className="text-xs font-bold leading-tight">Chat Admin WhatsApp</span>
+            <span className="block text-[10px] text-emerald-200 font-medium leading-none">Ada Pertanyaan?</span>
+            <span className="text-xs font-bold leading-tight">Chat WA: {WHATSAPP_DISPLAY}</span>
           </div>
         </a>
       </div>

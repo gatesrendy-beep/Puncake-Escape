@@ -8,9 +8,12 @@ import {
   Flame, 
   Sparkles, 
   CheckCircle2,
-  Clock
+  Clock,
+  PhoneCall
 } from 'lucide-react';
 import { FilterOptions } from '../types';
+import { SOCIAL_HANDLE, WHATSAPP_DISPLAY, SOCIAL_LINKS } from '../data/villas';
+import logoImg from '../assets/images/puncake_logo_1789261741327.jpg';
 
 interface HeroSearchProps {
   filters: FilterOptions;
@@ -52,27 +55,58 @@ export function HeroSearch({
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=2000&q=80" 
-          alt="Puncak Escape Mountain Villa" 
-          className="w-full h-full object-cover object-center opacity-30 scale-105 transform animate-pulse duration-[10000ms]"
+          alt="Puncak Escape Private Mountain Villa" 
+          className="w-full h-full object-cover object-center opacity-30"
+          loading="eager"
+          decoding="async"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/75 to-stone-900/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/80 to-stone-900/60" />
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Brand Badge & Tagline */}
+        {/* Brand Badge, Official Logo & Tagline */}
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-900/60 border border-emerald-500/40 text-emerald-300 text-xs sm:text-sm font-medium backdrop-blur-md">
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Puncak Escape • Your Escape in Puncak</span>
+          
+          {/* Official Emblem Logo with Gold Ring Accent */}
+          <div className="flex flex-col items-center justify-center">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full p-1 bg-gradient-to-tr from-amber-600 via-amber-200 to-amber-500 shadow-2xl mb-3 hover:scale-105 transition-transform">
+              <img 
+                src={logoImg} 
+                alt="Puncak Escape Official Emblem" 
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover rounded-full shadow-inner"
+              />
+            </div>
+
+            {/* Badges: Tagline & Social Handles */}
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/50 text-emerald-300 text-xs font-semibold backdrop-blur-md shadow-xs">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Official {SOCIAL_HANDLE}</span>
+              </div>
+              <a 
+                href={SOCIAL_LINKS.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-950/70 hover:bg-amber-900/80 border border-amber-500/50 text-amber-200 text-xs font-medium backdrop-blur-md transition-colors"
+              >
+                <PhoneCall className="w-3 h-3 text-amber-300 fill-current" />
+                <span>Concierge WA: {WHATSAPP_DISPLAY}</span>
+              </a>
+            </div>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-stone-50 font-display leading-[1.15]">
-            Discover Premium Private Villas in <span className="text-emerald-400 italic">Puncak & Cisarua</span>
+          <p className="text-xs sm:text-sm font-semibold tracking-widest uppercase text-emerald-400">
+            Koleksi Villa Kurasi • Cisarua & Tugu Selatan 16750
+          </p>
+
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold tracking-tight text-stone-50 font-display leading-[1.12]">
+            Your private escape in <span className="text-emerald-400 italic">Puncak</span>.
           </h1>
 
-          <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl mx-auto">
-            Rasakan liburan sejuk eksklusif di Tugu Selatan & Cisarua. Villa privat dengan kolam air hangat, panorama kebun teh, dan reservasi instan via WhatsApp tanpa biaya terselubung.
+          <p className="text-base sm:text-lg text-stone-300 leading-relaxed max-w-2xl mx-auto font-normal">
+            Pilihan villa privat terbaik di Cisarua & Tugu Selatan dengan kolam renang air hangat, panorama kebun teh, dan dukungan concierge lokal langsung via WhatsApp.
           </p>
         </div>
 
@@ -95,10 +129,9 @@ export function HeroSearch({
                   onChange={(e) => handleAreaSelect(e.target.value)}
                   className="w-full bg-transparent font-semibold text-stone-800 focus:outline-none text-sm cursor-pointer"
                 >
-                  <option value="">Semua Wilayah Puncak</option>
-                  <option value="Tugu Selatan">Tugu Selatan (Kebun Teh & Dingin)</option>
-                  <option value="Cisarua">Cisarua (Dekat Safari & Akses Tol)</option>
-                  <option value="Puncak Pass">Puncak Pass & Sekitarnya</option>
+                  <option value="">Semua Area Puncak (Cisarua & Tugu)</option>
+                  <option value="Tugu Selatan">Tugu Selatan (Kebun Teh & 17°C)</option>
+                  <option value="Cisarua">Cisarua (Dekat Safari & Tol Ciawi)</option>
                 </select>
               </div>
 
@@ -111,6 +144,7 @@ export function HeroSearch({
                   </label>
                   <input
                     type="date"
+                    min={new Date().toISOString().split('T')[0]}
                     value={checkInDate}
                     onChange={(e) => onDateChange(e.target.value, checkOutDate)}
                     className="w-full bg-transparent text-xs sm:text-sm font-semibold text-stone-800 focus:outline-none cursor-pointer"
@@ -123,6 +157,7 @@ export function HeroSearch({
                   </label>
                   <input
                     type="date"
+                    min={checkInDate || new Date().toISOString().split('T')[0]}
                     value={checkOutDate}
                     onChange={(e) => onDateChange(checkInDate, e.target.value)}
                     className="w-full bg-transparent text-xs sm:text-sm font-semibold text-stone-800 focus:outline-none cursor-pointer"
@@ -167,7 +202,7 @@ export function HeroSearch({
             <div className="mt-4 pt-3 border-t border-stone-200/70 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               
               <div className="flex flex-wrap items-center gap-2 text-xs text-stone-600">
-                <span className="font-semibold text-stone-700">Pilihan Populer:</span>
+                <span className="font-semibold text-stone-700">Filter Cepat:</span>
                 <button
                   type="button"
                   onClick={() => onFilterChange({ onlyHeatedPool: !filters.onlyHeatedPool })}
@@ -190,20 +225,38 @@ export function HeroSearch({
                   }`}
                 >
                   <Sparkles className="w-3 h-3 text-emerald-600" />
-                  View Gunung & Kebun Teh
+                  View Kebun Teh
                 </button>
               </div>
 
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-sm shadow-md shadow-emerald-900/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
-              >
-                <Search className="w-4 h-4" />
-                <span>Cari Villa Tersedia</span>
-              </button>
+              <div className="flex items-center gap-3">
+                <a
+                  href="#villa-list"
+                  className="hidden sm:inline-flex text-xs font-medium text-stone-600 hover:text-emerald-800 underline underline-offset-4 transition-colors"
+                >
+                  Atau jelajahi seluruh villa ↓
+                </a>
+                <button
+                  type="submit"
+                  className="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white font-semibold text-sm shadow-md shadow-emerald-900/30 flex items-center justify-center gap-2 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                >
+                  <Search className="w-4 h-4" />
+                  <span>Cari Villa Tersedia</span>
+                </button>
+              </div>
 
             </div>
           </form>
+
+          {/* Mobile Secondary explore link */}
+          <div className="mt-3 text-center sm:hidden">
+            <a
+              href="#villa-list"
+              className="text-xs font-medium text-stone-400 hover:text-emerald-300 underline underline-offset-4"
+            >
+              Atau jelajahi seluruh villa kami ↓
+            </a>
+          </div>
         </div>
 
         {/* Value Props & Trust Badges under Hero */}

@@ -176,6 +176,16 @@ export function VillaDetailModal({
               <MapPin className="w-4 h-4 text-emerald-700 shrink-0" />
               <span>{villa.location.area}, {villa.location.district}, {villa.location.city} {villa.location.postalCode}</span>
             </p>
+
+            {/* "Why This Villa?" Positioning Box */}
+            <div className="mt-3 p-3 sm:p-3.5 rounded-2xl bg-emerald-50/80 border border-emerald-200/80 text-emerald-950 flex items-start gap-2.5">
+              <div className="px-2 py-0.5 rounded-md bg-emerald-700 text-white font-bold text-[10px] sm:text-xs uppercase tracking-wider shrink-0 mt-0.5">
+                Rekomendasi
+              </div>
+              <p className="text-xs sm:text-sm font-medium leading-relaxed">
+                {villa.whyThisVilla}
+              </p>
+            </div>
           </div>
 
           {/* Photo Gallery with Hero and Thumbnails */}
@@ -525,8 +535,12 @@ export function VillaDetailModal({
                     <span>Biaya Layanan & Admin:</span>
                     <span className="text-emerald-700 font-bold">GRATIS (Rp 0)</span>
                   </div>
+                  <div className="flex justify-between text-stone-500 text-[11px]">
+                    <span>Security Deposit (Refundable saat check-out):</span>
+                    <span>{formatRupiah(villa.securityDeposit || 500000)}</span>
+                  </div>
                   <div className="pt-2 border-t border-stone-100 flex justify-between items-baseline">
-                    <span className="font-bold text-stone-900 text-sm">Estimasi Total:</span>
+                    <span className="font-bold text-stone-900 text-sm">Estimasi Total Sewa:</span>
                     <span className="font-bold text-stone-900 text-lg sm:text-xl font-display text-emerald-800">
                       {formatRupiah(total)}
                     </span>

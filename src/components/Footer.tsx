@@ -1,14 +1,14 @@
 import { 
   PhoneCall, 
   MapPin, 
-  Mail, 
   Clock, 
-  Sparkles, 
   ShieldCheck, 
-  ExternalLink 
+  CheckCircle2
 } from 'lucide-react';
-import { WHATSAPP_DISPLAY, OFFICE_ADDRESS } from '../data/villas';
+import { WHATSAPP_DISPLAY, OFFICE_ADDRESS, SOCIAL_HANDLE } from '../data/villas';
 import { generateGeneralWhatsAppInquiryUrl } from '../utils/format';
+import { BrandLogo } from './BrandLogo';
+import { SocialButtons } from './SocialButtons';
 
 interface FooterProps {
   onSelectArea: (area: string) => void;
@@ -26,22 +26,10 @@ export function Footer({ onSelectArea, onFilterHeated, onFilterFamily }: FooterP
           
           {/* Brand & Description (2 cols) */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-700 flex items-center justify-center text-white font-serif-heading font-bold">
-                <span>P</span>
-              </div>
-              <div>
-                <span className="text-xl font-bold tracking-tight text-white font-display">
-                  Puncak Escape
-                </span>
-                <p className="text-[11px] uppercase tracking-widest text-emerald-400 font-medium">
-                  Your Escape in Puncak
-                </p>
-              </div>
-            </div>
+            <BrandLogo size="lg" />
 
             <p className="text-xs sm:text-sm text-stone-400 leading-relaxed max-w-sm">
-              Puncak Escape helps guests discover and book villas around Puncak, Cisarua, Tugu Selatan, West Java, Indonesia 16750. Platform reservasi villa privat terverifikasi dengan konfirmasi cepat via WhatsApp.
+              Puncak Escape helps guests discover and book villas around Puncak, Cisarua, Tugu Selatan, West Java, Indonesia 16750. Platform reservasi villa privat terverifikasi dengan konfirmasi instan via WhatsApp.
             </p>
 
             <div className="pt-2 text-xs space-y-2 text-stone-400">
@@ -109,7 +97,7 @@ export function Footer({ onSelectArea, onFilterHeated, onFilterFamily }: FooterP
             </ul>
           </div>
 
-          {/* Kategori Favorit */}
+          {/* Kategori Fasilitas */}
           <div className="space-y-3">
             <h4 className="text-sm font-bold text-white uppercase tracking-wider font-display">
               Pilihan Fasilitas
@@ -171,9 +159,9 @@ export function Footer({ onSelectArea, onFilterHeated, onFilterFamily }: FooterP
               className="inline-flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-bold transition-all shadow-md active:scale-95 text-center"
             >
               <PhoneCall className="w-3.5 h-3.5 fill-current" />
-              <span>Chat WhatsApp ({WHATSAPP_DISPLAY})</span>
+              <span>Chat CS ({WHATSAPP_DISPLAY})</span>
             </a>
-            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/80">
+            <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/90">
               <ShieldCheck className="w-3.5 h-3.5" />
               <span>Layanan Bebas Penipuan Villa</span>
             </div>
@@ -181,9 +169,30 @@ export function Footer({ onSelectArea, onFilterHeated, onFilterFamily }: FooterP
 
         </div>
 
+        {/* Social Media Community Section */}
+        <div className="pt-8 border-t border-stone-800/80 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                Akun Resmi Media Sosial: {SOCIAL_HANDLE}
+              </span>
+              <p className="text-xs text-stone-400 mt-0.5">
+                Dapatkan update villa baru, promo akhir pekan, dan tips liburan Puncak bebas macet setiap hari.
+              </p>
+            </div>
+            <div className="text-xs font-medium text-emerald-300">
+              Puncak Escape Verified Community
+            </div>
+          </div>
+
+          {/* Social cards */}
+          <SocialButtons variant="cards" />
+        </div>
+
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
-          <p>© {new Date().getFullYear()} Puncak Escape. All rights reserved. Your Escape in Puncak.</p>
+        <div className="pt-6 border-t border-stone-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
+          <p>© {new Date().getFullYear()} Puncak Escape. All rights reserved. "Your Escape in Puncak".</p>
           <div className="flex items-center gap-4 text-stone-400">
             <span>Tugu Selatan, Cisarua, West Java 16750</span>
             <span>•</span>
@@ -195,3 +204,4 @@ export function Footer({ onSelectArea, onFilterHeated, onFilterFamily }: FooterP
     </footer>
   );
 }
+

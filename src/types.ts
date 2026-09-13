@@ -3,6 +3,8 @@ export interface Villa {
   name: string;
   slug: string;
   tagline: string;
+  whyThisVilla: string; // Concise positioning statement for 2-second decision making
+  intentCategory: ('family' | 'heated-pool' | 'mountain-view' | 'gathering' | 'romantic')[];
   location: {
     area: 'Tugu Selatan' | 'Cisarua' | 'Puncak Pass' | 'Megamendung';
     district: string;
@@ -13,6 +15,8 @@ export interface Villa {
   };
   pricePerNightWeekday: number; // in IDR
   pricePerNightWeekend: number; // in IDR
+  securityDeposit?: number; // Transparent refundable deposit
+  extraGuestFee?: number; // Per extra guest if applicable
   bedrooms: number;
   bathrooms: number;
   maxGuests: number;
@@ -61,6 +65,7 @@ export interface BookingState {
 }
 
 export interface FilterOptions {
+  intent: string; // 'all' | 'family' | 'heated-pool' | 'mountain-view' | 'gathering' | 'romantic'
   area: string;
   minPrice: number;
   maxPrice: number;
@@ -73,3 +78,4 @@ export interface FilterOptions {
   searchQuery: string;
   sortBy: 'recommended' | 'price-asc' | 'price-desc' | 'rating' | 'capacity';
 }
+

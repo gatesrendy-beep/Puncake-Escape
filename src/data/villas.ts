@@ -1,7 +1,15 @@
 import { Villa } from '../types';
 
-export const WHATSAPP_NUMBER = '6281288891675'; // Official booking concierge
-export const WHATSAPP_DISPLAY = '+62 812-8889-1675';
+export const WHATSAPP_NUMBER = '6281349267683'; // Official booking concierge
+export const WHATSAPP_DISPLAY = '0813-4926-7683';
+export const WHATSAPP_DISPLAY_INTL = '+62 813-4926-7683';
+export const SOCIAL_HANDLE = '@puncakescapeid';
+export const SOCIAL_LINKS = {
+  instagram: 'https://instagram.com/puncakescapeid',
+  tiktok: 'https://tiktok.com/@puncakescapeid',
+  youtube: 'https://youtube.com/@puncakescapeid',
+  whatsapp: 'https://wa.me/6281349267683',
+};
 export const OFFICE_ADDRESS = 'Jl. Raya Puncak KM 84, Tugu Selatan, Kec. Cisarua, Kabupaten Bogor, Jawa Barat 16750';
 
 export const VILLAS_DATA: Villa[] = [
@@ -10,15 +18,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Casablanca Tugu',
     slug: 'villa-casablanca-tugu',
     tagline: 'Private warm infinity pool overlooking Mt. Gede Pangrango',
+    whyThisVilla: 'Pilihan utama keluarga besar yang mencari kolam air hangat privat & panorama luas Gunung Gede Pangrango.',
+    intentCategory: ['family', 'heated-pool', 'mountain-view', 'gathering'],
     location: {
       area: 'Tugu Selatan',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '90 mins via Tol Jagorawi',
+      distanceFromJakarta: '90 menit via Tol Jagorawi',
     },
     pricePerNightWeekday: 3450000,
     pricePerNightWeekend: 4750000,
+    securityDeposit: 500000,
+    extraGuestFee: 75000,
     bedrooms: 5,
     bathrooms: 5,
     maxGuests: 25,
@@ -28,11 +40,11 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: true,
     popularFor: 'family',
     images: [
-      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Heated Infinity Pool', 'Billiard & Table Tennis', 'BBQ Pavilion', 'Full Mountain View'],
     amenities: {
@@ -80,15 +92,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'The Glasshouse Sanctuary',
     slug: 'the-glasshouse-sanctuary',
     tagline: 'Modern architectural masterpiece nestled in Cisarua tea hills',
+    whyThisVilla: 'Pilihan utama pencinta estetika modern kontemporer dengan dinding kaca tinggi berlatar bukit teh & private heated plunge pool.',
+    intentCategory: ['family', 'heated-pool', 'mountain-view', 'romantic'],
     location: {
       area: 'Cisarua',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '85 mins from Ciawi Toll Exit',
+      distanceFromJakarta: '85 menit dari Gerbang Tol Ciawi',
     },
     pricePerNightWeekday: 4100000,
     pricePerNightWeekend: 5800000,
+    securityDeposit: 500000,
+    extraGuestFee: 100000,
     bedrooms: 4,
     bathrooms: 4,
     maxGuests: 16,
@@ -98,10 +114,10 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: true,
     popularFor: 'luxury',
     images: [
-      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Panoramic Glass Walls', 'Warm Plunge Pool', 'Fireplace Lounge', 'Fiber WiFi 100Mbps'],
     amenities: {
@@ -148,15 +164,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Pine Forest Chalet',
     slug: 'villa-pine-forest-chalet',
     tagline: 'Warm Scandinavian wooden lodge surrounded by fragrant pine woods',
+    whyThisVilla: 'Pilihan terbaik untuk suasana sejuk damai bernuansa kayu Skandinavia, api unggun malam, dan privasi penuh di kelilingi pohon pinus.',
+    intentCategory: ['romantic', 'mountain-view', 'family'],
     location: {
       area: 'Tugu Selatan',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '95 mins via Gadog',
+      distanceFromJakarta: '95 menit via Gadog',
     },
     pricePerNightWeekday: 2800000,
     pricePerNightWeekend: 3900000,
+    securityDeposit: 500000,
+    extraGuestFee: 50000,
     bedrooms: 3,
     bathrooms: 3,
     maxGuests: 12,
@@ -166,10 +186,10 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: false,
     popularFor: 'romantic',
     images: [
-      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Teak Wood Architecture', 'Outdoor Sunken Fire Pit', 'Private Spring Pool', 'Pine Forest Trail'],
     amenities: {
@@ -214,15 +234,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Kayu Manis Grand Estate',
     slug: 'villa-kayu-manis-grand-estate',
     tagline: 'Expansive luxury compound for large family gatherings & company retreats',
+    whyThisVilla: 'Pilihan terbaik untuk rombongan besar & arisan keluarga (20-40 tamu) dengan lapangan 2.000m², aula makan besar & akses bus mudah.',
+    intentCategory: ['gathering', 'family'],
     location: {
       area: 'Cisarua',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '80 mins via Ciawi',
+      distanceFromJakarta: '80 menit via Ciawi',
     },
     pricePerNightWeekday: 5200000,
     pricePerNightWeekend: 7400000,
+    securityDeposit: 1000000,
+    extraGuestFee: 50000,
     bedrooms: 7,
     bathrooms: 8,
     maxGuests: 40,
@@ -232,10 +256,10 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: true,
     popularFor: 'gathering',
     images: [
-      'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Olympic Size Pool + Kids Pool', 'Badminton Court', 'Karaoke Hall', 'Large Dining Hall (40 pax)'],
     amenities: {
@@ -281,15 +305,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Aruna Japandi Hillside',
     slug: 'villa-aruna-japandi-hillside',
     tagline: 'Serene warm Japanese-Scandinavian aesthetics with infinity heated pool',
+    whyThisVilla: 'Pilihan utama keluarga pencinta ketenangan minimalis Japandi dengan kolam infinity air hangat 31°C & sunken conversation lounge.',
+    intentCategory: ['family', 'heated-pool', 'mountain-view'],
     location: {
       area: 'Tugu Selatan',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '90 mins via Megamendung alternative route',
+      distanceFromJakarta: '90 menit via jalur alternatif Megamendung',
     },
     pricePerNightWeekday: 3200000,
     pricePerNightWeekend: 4500000,
+    securityDeposit: 500000,
+    extraGuestFee: 75000,
     bedrooms: 4,
     bathrooms: 4,
     maxGuests: 18,
@@ -299,10 +327,10 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: true,
     popularFor: 'family',
     images: [
-      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1598928506311-c55ded91a20c?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Heated Pool with Sunken Lounge', 'Tatami Reading Corner', 'Open Concept Kitchen', 'Sunset Ridge View'],
     amenities: {
@@ -348,15 +376,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Grand Gunung Mas View',
     slug: 'villa-grand-gunung-mas-view',
     tagline: 'Direct borders with Gunung Mas tea estate & panoramic paragliding hill views',
+    whyThisVilla: 'Pilihan terbaik untuk jalan pagi langsung ke hamparan kebun teh Gunung Mas, kolam air hangat, dan gazebo rooftop.',
+    intentCategory: ['family', 'heated-pool', 'mountain-view', 'gathering'],
     location: {
       area: 'Tugu Selatan',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '90 mins',
+      distanceFromJakarta: '90 menit',
     },
     pricePerNightWeekday: 3700000,
     pricePerNightWeekend: 5100000,
+    securityDeposit: 500000,
+    extraGuestFee: 75000,
     bedrooms: 5,
     bathrooms: 5,
     maxGuests: 26,
@@ -366,10 +398,10 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: false,
     popularFor: 'family',
     images: [
-      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1584622781867-1c5c0d297ffb?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600585154363-67eb9e2e2099?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1584622781867-1c5c0d297ffb?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Direct Tea Walk Access', 'Heated Pool', 'Rooftop Gazebo', 'Billiard Table'],
     amenities: {
@@ -416,15 +448,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Lavender Romantic Cottage',
     slug: 'villa-lavender-romantic-cottage',
     tagline: 'Charming European countryside cottage with warm private pool',
+    whyThisVilla: 'Pilihan terbaik untuk pasangan atau keluarga kecil (2-6 tamu) yang mendambakan suasana cottage privat dengan kolam plunge hangat dekat Taman Safari.',
+    intentCategory: ['romantic', 'heated-pool', 'family'],
     location: {
       area: 'Cisarua',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '85 mins',
+      distanceFromJakarta: '85 menit',
     },
     pricePerNightWeekday: 1950000,
     pricePerNightWeekend: 2750000,
+    securityDeposit: 500000,
+    extraGuestFee: 50000,
     bedrooms: 2,
     bathrooms: 2,
     maxGuests: 6,
@@ -434,9 +470,9 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: false,
     popularFor: 'romantic',
     images: [
-      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Heated Plunge Pool', 'Flower Garden Picnic', 'Cozy Romantic Fireplace', 'Complimentary Breakfast'],
     amenities: {
@@ -480,15 +516,19 @@ export const VILLAS_DATA: Villa[] = [
     name: 'Villa Senja Panorama Cliff',
     slug: 'villa-senja-panorama-cliff',
     tagline: 'Perched on a cliff edge with unobstructed sunset & twinkling Bogor city lights',
+    whyThisVilla: 'Pilihan terbaik untuk pengagum golden hour sunset & gemerlap lampu malam dari kolam infinity tebing air hangat.',
+    intentCategory: ['family', 'heated-pool', 'mountain-view', 'gathering'],
     location: {
       area: 'Cisarua',
       district: 'Cisarua',
       city: 'Kabupaten Bogor, Jawa Barat',
       postalCode: '16750',
-      distanceFromJakarta: '85 mins',
+      distanceFromJakarta: '85 menit',
     },
     pricePerNightWeekday: 3100000,
     pricePerNightWeekend: 4350000,
+    securityDeposit: 500000,
+    extraGuestFee: 75000,
     bedrooms: 4,
     bathrooms: 4,
     maxGuests: 20,
@@ -498,9 +538,9 @@ export const VILLAS_DATA: Villa[] = [
     isFeatured: false,
     popularFor: 'family',
     images: [
-      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80'
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=80',
+      'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1000&q=80'
     ],
     features: ['Cliff-Edge Infinity Pool', 'Rooftop Sunset Lounge', 'Billiard Room', 'Karaoke Set'],
     amenities: {
@@ -542,3 +582,4 @@ export const VILLAS_DATA: Villa[] = [
     checkOutTime: '12:00'
   }
 ];
+
